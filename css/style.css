@@ -313,6 +313,10 @@ a.info {
     color: white;
 }
 
+.adminButton {
+    display: flex;
+}
+
 .articleLine {
     display: flex; 
 }
