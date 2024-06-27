@@ -5,6 +5,19 @@
  */
 class CommentManager extends AbstractEntityManager
 {
+
+    public function getAllComments() : array
+    {
+        $sql = "SELECT * FROM comment";
+        $result = $this->db->query($sql);
+        $comments = [];
+
+        while ($comment = $result->fetch()) {
+            $comments[] = new Comment($comment);
+        }
+        return $comments;
+    }
+
     /**
      * Récupère tous les commentaires d'un article.
      * @param int $idArticle : l'id de l'article.
@@ -21,7 +34,7 @@ class CommentManager extends AbstractEntityManager
         }
         return $comments;
     }
-
+    
     /**
      * Récupère un commentaire par son id.
      * @param int $id : l'id du commentaire.
