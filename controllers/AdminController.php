@@ -25,6 +25,47 @@ class AdminController {
         ]);
     }
 
+    public function showAdminMonitoring() : void
+    {
+        // On vérifie que l'utilisateur est connecté.
+        $this->checkIfUserIsConnected();
+
+        
+        $prepare = Utils::request("prepare", 'title');
+        $order = Utils::request("order", 'asc');
+
+        // On récupère les articles.
+        $articleManager = new ArticleManager();
+        $articles = $articleManager->getAllArticles($prepare, $order);
+
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getAllComments();
+
+        // On affiche la page de monitoring.
+        $view = new View("Monitoring");
+        $view->render("monitoringAdmin", [
+            'article' => $articles, 
+            'comments' => $comments,
+            'order' => $order
+            
+        ]);
+    }
+
+    public function showCommentMonitoring() : void
+    {
+        // On vérifie que l'utilisateur est connecté.
+        $this->checkIfUserIsConnected();
+
+        $id = Utils::request("id", -1);
+
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getAllCommentsByArticleId($id);
+
+        $view = new View("MonitoringComment");
+        $view->render("monitoringComment", ['comments' => $comments]);
+    }
+
+
     /**
      * Vérifie que l'utilisateur est connecté.
      * @return void
@@ -175,5 +216,22 @@ class AdminController {
        
         // On redirige vers la page d'administration.
         Utils::redirect("admin");
+    }
+
+    public function deleteComment($commentId) : void {
+        $this->checkIfUserIsConnected();
+
+        // On récupère le commentaire par son ID pour le passer au modèle.
+        $commentManager = new CommentManager();
+        $comment = $commentManager->getCommentById($commentId);
+        
+        if ($comment) {
+            $commentManager->deleteComment($comment);
+            // On redirige vers la page d'administration.
+            Utils::redirect("monitoringAdmin");
+        } else {
+            // Gérer le cas où le commentaire n'existe pas
+            Utils::redirect("errorPage");
+        }
     }
 }

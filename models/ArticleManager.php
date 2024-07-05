@@ -9,9 +9,21 @@ class ArticleManager extends AbstractEntityManager
      * Récupère tous les articles.
      * @return array : un tableau d'objets Article.
      */
-    public function getAllArticles() : array
+    public function getAllArticles($prepare = 'date_creation', $order = 'asc') : array
     {
-        $sql = "SELECT * FROM article";
+
+    $validPrepare = ['title', 'view_article', 'date_creation'];
+    $validOrder = ['asc', 'desc'];
+
+    if (!in_array($prepare, $validPrepare)) {
+        $prepare = 'title'; // default 
+    }
+
+    if (!in_array($order, $validOrder)) {
+        $order = 'asc'; // default 
+    }
+
+        $sql = "SELECT * FROM article ORDER BY $prepare $order";
         $result = $this->db->query($sql);
         $articles = [];
 
@@ -37,6 +49,7 @@ class ArticleManager extends AbstractEntityManager
         return null;
     }
 
+    
     /**
      * Ajoute ou modifie un article.
      * On sait si l'article est un nouvel article car son id sera -1.
@@ -59,11 +72,12 @@ class ArticleManager extends AbstractEntityManager
      */
     public function addArticle(Article $article) : void
     {
-        $sql = "INSERT INTO article (id_user, title, content, date_creation) VALUES (:id_user, :title, :content, NOW())";
+        $sql = "INSERT INTO article (id_user, title, content, date_creation, view_article) VALUES (:id_user, :title, :content, NOW(), :view_article)";
         $this->db->query($sql, [
             'id_user' => $article->getIdUser(),
             'title' => $article->getTitle(),
-            'content' => $article->getContent()
+            'content' => $article->getContent(),
+            'view_article' => $article->getViewArticle()
         ]);
     }
 
@@ -74,10 +88,11 @@ class ArticleManager extends AbstractEntityManager
      */
     public function updateArticle(Article $article) : void
     {
-        $sql = "UPDATE article SET title = :title, content = :content, date_update = NOW() WHERE id = :id";
+        $sql = "UPDATE article SET title = :title, content = :content, date_update = NOW(), view_article = :view_article WHERE id = :id";
         $this->db->query($sql, [
             'title' => $article->getTitle(),
             'content' => $article->getContent(),
+            'view_article' => $article->getViewArticle(),
             'id' => $article->getId()
         ]);
     }
