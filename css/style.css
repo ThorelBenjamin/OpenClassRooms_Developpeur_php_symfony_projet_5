@@ -21,7 +21,6 @@
     --quoteColor: #c5cbe4;
     --commentPaleColor: #99a140;
     --commentColor: #255E33;
-    --commentPaleColorTwo: #7b8134;
 }
 
 /**
@@ -314,10 +313,6 @@ a.info {
     color: white;
 }
 
-.adminButton {
-    display: flex;
-}
-
 .articleLine {
     display: flex; 
 }
@@ -341,45 +336,6 @@ a.info {
     padding: 20px;
     border: 1px solid var(--backgroundColor);
 }
-
-/**
- * Partie monitoring admin
- */ 
-
-.monitoringAdmin {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.monitoringAdmin td, .monitoringAdmin th {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-
-.monitoringAdmin tr{
-    background-color: var(--commentPaleColorTwo);
-    color: white;
-}  
-
-.monitoringAdmin tr:nth-child(even){
-    background-color: var(--commentPaleColor);
-    color: white;
-}
-
-
-.monitoringAdmin tr:hover {
-    background-color: var(--headerColor);
-    color: black;
-}
-  
-.monitoringAdmin th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: var(--commentColor);
-    color: white;
-}
-
 
 /** 
  * Footer global de la page.

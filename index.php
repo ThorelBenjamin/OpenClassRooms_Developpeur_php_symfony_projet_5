@@ -44,17 +44,6 @@ try {
             $adminController->showAdmin();
             break;
 
-        case 'monitoringAdmin': 
-            $adminController = new AdminController();
-            $adminController->showAdminMonitoring();
-            break;
-
-        case 'monitoringComment': 
-            $adminController = new AdminController();
-            $adminController->showCommentMonitoring();
-            break;    
-    
-
         case 'connectionForm':
             $adminController = new AdminController();
             $adminController->displayConnectionForm();
@@ -83,12 +72,6 @@ try {
         case 'deleteArticle':
             $adminController = new AdminController();
             $adminController->deleteArticle();
-            break;
-
-        case 'deleteComment':
-            $commentId = $_GET['commentId'];
-            $adminController = new AdminController();
-            $adminController->deleteComment($commentId);
             break;
 
         default:

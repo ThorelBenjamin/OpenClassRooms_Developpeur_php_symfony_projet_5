@@ -31,7 +31,6 @@ class Comment extends AbstractEntity
         $this->idArticle = $idArticle;
     }
 
-
     /**
      * Getter pour le pseudo.
      * @return string
