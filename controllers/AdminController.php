@@ -36,7 +36,7 @@ class AdminController {
 
         // On récupère les articles.
         $articleManager = new ArticleManager();
-        $articles = $articleManager->getAllArticles($prepare, $order);
+        $articles = $articleManager->getAllArticlesAndComments($prepare, $order);
 
         $commentManager = new CommentManager();
         $comments = $commentManager->getAllComments();

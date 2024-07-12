@@ -9,6 +9,7 @@
     private int $idUser;
     private string $title = "";
     private string $content = "";
+    private int $numbersComments = 0;
     //private int $id;
     private int $viewArticle = 0;
     private ?DateTime $dateCreation = null;
@@ -70,7 +71,16 @@
         return $this->viewArticle;
     }
 
-    
+    public function setNumbersComments(int $numbersComments) : void 
+    {
+        $this->numbersComments = $numbersComments;
+    }
+
+    public function getNumbersComments() : int
+    {
+        return $this->numbersComments;
+    }
+
     /**
      * Getter pour le contenu.
      * Retourne les $length premiers caractères du contenu.

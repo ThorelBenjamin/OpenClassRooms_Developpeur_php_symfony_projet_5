@@ -32,6 +32,50 @@ class ArticleManager extends AbstractEntityManager
         }
         return $articles;
     }
+
+
+    public function getAllArticlesAndComments($prepare = 'date_creation', $order = 'asc') : array
+        {
+
+        $validPrepare = ['title', 'view_article', 'date_creation', 'numbers_comments'];
+        $validOrder = ['asc', 'desc'];
+
+        if (!in_array($prepare, $validPrepare)) {
+            $prepare = 'title'; // default 
+        }
+
+        if (!in_array($order, $validOrder)) {
+            $order = 'asc'; // default 
+        }
+
+            $sql = "SELECT 
+                        article.id,
+                        article.id_user,
+                        article.title,
+                        article.content,
+                        article.date_creation,
+                        article.date_update,
+                        article.view_article,
+                        COUNT(comment.id) AS numbers_comments
+                    FROM 
+                        article
+                    LEFT JOIN 
+                        comment ON article.id = comment.id_article
+                    GROUP BY 
+                        article.id
+                    ORDER BY 
+                        $prepare $order";
+            $result = $this->db->query($sql);
+            $articles = [];
+
+            while ($article = $result->fetch()) {
+                $articles[] = new Article($article);
+            }
+            return $articles;
+        }
+
+
+
     
     /**
      * Récupère un article par son id.
