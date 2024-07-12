@@ -20,6 +20,34 @@ class ArticleManager extends AbstractEntityManager
         }
         return $articles;
     }
+
+
+    public function getAllArticlesAndComments() : array
+        {
+            $sql = "SELECT 
+                        article.id,
+                        article.id_user,
+                        article.title,
+                        article.content,
+                        article.date_creation,
+                        article.date_update,
+                        article.view_article,
+                        COUNT(comment.id) AS numbers_comments
+                    FROM 
+                        article
+                    LEFT JOIN 
+                        comment ON article.id = comment.id_article
+                    GROUP BY 
+                        article.id";
+            $result = $this->db->query($sql);
+            $articles = [];
+
+            while ($article = $result->fetch()) {
+                $articles[] = new Article($article);
+            }
+            return $articles;
+        }
+
     
     /**
      * Récupère un article par son id.
@@ -37,6 +65,7 @@ class ArticleManager extends AbstractEntityManager
         return null;
     }
 
+    
     /**
      * Ajoute ou modifie un article.
      * On sait si l'article est un nouvel article car son id sera -1.
@@ -59,11 +88,12 @@ class ArticleManager extends AbstractEntityManager
      */
     public function addArticle(Article $article) : void
     {
-        $sql = "INSERT INTO article (id_user, title, content, date_creation) VALUES (:id_user, :title, :content, NOW())";
+        $sql = "INSERT INTO article (id_user, title, content, date_creation, view_article) VALUES (:id_user, :title, :content, NOW(), :view_article)";
         $this->db->query($sql, [
             'id_user' => $article->getIdUser(),
             'title' => $article->getTitle(),
-            'content' => $article->getContent()
+            'content' => $article->getContent(),
+            'view_article' => $article->getViewArticle()
         ]);
     }
 
@@ -74,10 +104,11 @@ class ArticleManager extends AbstractEntityManager
      */
     public function updateArticle(Article $article) : void
     {
-        $sql = "UPDATE article SET title = :title, content = :content, date_update = NOW() WHERE id = :id";
+        $sql = "UPDATE article SET title = :title, content = :content, date_update = NOW(), view_article = :view_article WHERE id = :id";
         $this->db->query($sql, [
             'title' => $article->getTitle(),
             'content' => $article->getContent(),
+            'view_article' => $article->getViewArticle(),
             'id' => $article->getId()
         ]);
     }
