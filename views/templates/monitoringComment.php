@@ -12,7 +12,7 @@
             <td><?= $comment->getPseudo() ?></td>
             <td><?= $comment->getContent() ?></td>
             <td><?= Utils::convertDateToFrenchFormat($comment->getDateCreation()) ?></td>
-            <td><div><a href="index.php?action=deleteComment&commentId=<?= $comment->getId() ?>" <?= Utils::askConfirmation("Êtes-vous sûr de vouloir supprimer ce commentaire ?") ?> >Supprimer</a></div></td>
+            <td><div><a href="index.php?action=deleteComment&commentId=<?= $comment->getId() ?>" class="submit" <?= Utils::askConfirmation("Êtes-vous sûr de vouloir supprimer ce commentaire ?") ?> >Supprimer</a></div></td>
             </tr>
         <?php } ?>
     </table>
