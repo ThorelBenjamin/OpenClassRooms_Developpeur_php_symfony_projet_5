@@ -31,7 +31,7 @@ class AdminController {
         $this->checkIfUserIsConnected();
 
         $prepare = Utils::request("prepare", 'title');
-        $order = Utils::request('order', 'asc') === 'desc' ? 'desc' : 'asc';
+        $order = Utils::request('order', 'asc');
 
         // On récupère les articles.
         $articleManager = new ArticleManager();
@@ -39,6 +39,25 @@ class AdminController {
 
         $commentManager = new CommentManager();
         $comments = $commentManager->getAllComments();
+
+        $sortFunctions = [
+            'title' => function($a, $b) use ($order) {
+                return $order === 'desc' ? strcmp($b->getTitle(), $a->getTitle()) : strcmp($a->getTitle(), $b->getTitle());
+            },
+            'view_article' => function($a, $b) use ($order) {
+                return $order === 'desc' ? $b->getViewArticle() - $a->getViewArticle() : $a->getViewArticle() - $b->getViewArticle();
+            },
+            'nombre_commentaire' => function($a, $b) use ($order) {
+                return $order === 'desc' ? $b->getNumbersComments() - $a->getNumbersComments() : $a->getNumbersComments() - $b->getNumbersComments();
+            },
+            'date_creation' => function($a, $b) use ($order) {
+                return $order === 'desc' ? strtotime($b->getDateCreation()->format('Y-m-d H:i:s')) - strtotime($a->getDateCreation()->format('Y-m-d H:i:s')) : strtotime($a->getDateCreation()->format('Y-m-d H:i:s')) - strtotime($b->getDateCreation()->format('Y-m-d H:i:s'));
+            }
+        ];
+        
+        if (isset($sortFunctions[$prepare])) {
+            usort($articles, $sortFunctions[$prepare]);
+        }
 
         // On affiche la page de monitoring.
         $view = new View("Monitoring");

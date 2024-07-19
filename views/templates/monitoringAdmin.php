@@ -1,25 +1,3 @@
-<?php
-
-$sortFunctions = [
-    'title' => function($a, $b) use ($order) {
-        return $order === 'desc' ? strcmp($b->getTitle(), $a->getTitle()) : strcmp($a->getTitle(), $b->getTitle());
-    },
-    'view_article' => function($a, $b) use ($order) {
-        return $order === 'desc' ? $b->getViewArticle() - $a->getViewArticle() : $a->getViewArticle() - $b->getViewArticle();
-    },
-    'nombre_commentaire' => function($a, $b) use ($order) {
-        return $order === 'desc' ? $b->getNumbersComments() - $a->getNumbersComments() : $a->getNumbersComments() - $b->getNumbersComments();
-    },
-    'date_creation' => function($a, $b) use ($order) {
-        return $order === 'desc' ? strtotime($b->getDateCreation()->format('Y-m-d H:i:s')) - strtotime($a->getDateCreation()->format('Y-m-d H:i:s')) : strtotime($a->getDateCreation()->format('Y-m-d H:i:s')) - strtotime($b->getDateCreation()->format('Y-m-d H:i:s'));
-    }
-];
-
-if (isset($sortFunctions[$prepare])) {
-    usort($article, $sortFunctions[$prepare]);
-}
-?>
-
 <div>
     <table class="monitoringAdmin">
         <tr>
